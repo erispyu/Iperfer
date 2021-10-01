@@ -19,6 +19,10 @@ public class Iperfer {
             }
             if (args[1] == "-h" && args[3] == "-p" && args[5] =="-t") {
                 String serverHostname = args[2];
+                if (!checkHostname(serverHostname)) {
+                    System.out.println("Error: invalid hostname. Should be in IPv4 format.");
+                    System.exit(-1);
+                }
                 int serverPort = parsePort(args[4]);
                 int time = parseTime(args[5]);
                 if (serverPort == DUMMY_INT || time == DUMMY_INT) {
@@ -63,6 +67,33 @@ public class Iperfer {
     private static void printUsageAndExit() {
         System.out.print(USAGE_INFO);
         System.exit(-1);
+    }
+
+    private static boolean checkHostname(String ipStr) {
+        try {
+            if ( ipStr == null || ipStr.isEmpty() ) {
+                return false;
+            }
+
+            String[] parts = ipStr.split( "\\." );
+            if ( parts.length != 4 ) {
+                return false;
+            }
+
+            for ( String s : parts ) {
+                int i = Integer.parseInt( s );
+                if ( (i < 0) || (i > 255) ) {
+                    return false;
+                }
+            }
+            if ( ipStr.endsWith(".") ) {
+                return false;
+            }
+
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
     }
 
     private static int parsePort(String portStr) {
