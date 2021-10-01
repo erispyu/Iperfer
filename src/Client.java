@@ -1,22 +1,25 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
 
-    /** IP Address and port of the Server */
+    private static final int DATA_SIZE = 1000;
+
+    /** Initialization Arguments */
     private final String address;
     private final int port;
+    private final double time; // the duration in seconds for which data should be generated
 
     /** Initialize socket and output streams */
     private Socket socket = null;
-    private PrintWriter out = null;
+    private DataOutputStream out = null;
 
 
-    Client(String address, int port, int time) {
+    Client(String address, int port, double time) {
         this.address = address;
         this.port = port;
+        this.time = time;
     }
 
     /**
@@ -28,29 +31,39 @@ public class Client {
             socket = new Socket(address, port);
             System.out.println("Connected to the Server");
 
-            // Create a writer object
-            out = new PrintWriter(socket.getOutputStream(), true);
+            // Create a DataOutputStream object
+            out = new DataOutputStream(socket.getOutputStream());
 
-            // Take the message from the user
-            System.out.println("Type your message below ..");
-            Scanner scr = new Scanner(System.in);
-            String line = scr.nextLine();
+            // Build data of all zeros
+            byte[] data = new byte[DATA_SIZE];
+            int dataSent = 0; // in KB
+            double rate = 0; // in Mbps
 
-            // Send the message
-            out.println(line);
-            System.out.println("Message sent");
+            // Send out data in <this.time> seconds
+            double timeInNanoSec = this.time * Math.pow(10, 9);
+            double hasRunInNanoSec = 0;
+            long startTimeInNanoSec, endTimeInNanoSec;
+            while (hasRunInNanoSec < timeInNanoSec) {
+                startTimeInNanoSec = System.nanoTime();
+                // Send out 1000 bytes (1KB) per time
+                out.write(data);
+                endTimeInNanoSec = System.nanoTime();
+                hasRunInNanoSec += endTimeInNanoSec - startTimeInNanoSec;
+                // recording
+                dataSent++;
+            }
 
             // Close the connection
             System.out.println("Closing connection");
             out.close();
             socket.close();
+
+            // Calculate and print the summary
+            rate = (dataSent / 1000) * 8 / this.time;
+            System.out.printf("sent=%d KB rate=%f Mbps\n", dataSent, rate);
         } catch(IOException u) {
             System.out.println(u);
             System.exit(1);
         }
-    }
-
-    private void printSummary() {
-
     }
 }

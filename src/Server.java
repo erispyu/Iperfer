@@ -9,6 +9,8 @@ import java.net.Socket;
  */
 public class Server {
 
+    private static final int DATA_CHUNK = 1000;
+
     /** Port on which this server will run */
     private final int port;
 

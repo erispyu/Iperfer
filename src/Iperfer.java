@@ -1,10 +1,9 @@
-import java.io.IOException;
-
 public class Iperfer {
     private static final String USAGE_INFO = "Error: invalid arguments\nClient Mode: java Iperfer -c -h <server hostname> -p <server port> -t <time>\nSerevr Mode: java Iperfer -s -p <listen port>\n";
     private static final int PORT_MIN = 1024;
     private static final int PORT_MAX = 65535;
-    private static final int DUMMY_INT = -1;
+    private static final int DUMMY_PORT = -1;
+    private static final double DUMMY_TIME = -1;
 
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -24,8 +23,8 @@ public class Iperfer {
                     System.exit(-1);
                 }
                 int serverPort = parsePort(args[4]);
-                int time = parseTime(args[5]);
-                if (serverPort == DUMMY_INT || time == DUMMY_INT) {
+                double time = parseTime(args[5]);
+                if (serverPort == DUMMY_PORT || time == DUMMY_TIME) {
                     System.exit(-1);
                 }
                 clientMode(serverHostname, serverPort, time);
@@ -40,7 +39,7 @@ public class Iperfer {
             }
             if (args[1].equals("-p")) {
                 int listenPort = parsePort(args[2]);
-                if (listenPort == DUMMY_INT) {
+                if (listenPort == DUMMY_PORT) {
                     System.exit(-1);
                 }
                 serverMode(listenPort);
@@ -54,7 +53,7 @@ public class Iperfer {
         }
     }
 
-    private static void clientMode(String serverHostname, int serverPort, int time) {
+    private static void clientMode(String serverHostname, int serverPort, double time) {
         Client client = new Client(serverHostname, serverPort, time);
         client.start();
     }
@@ -103,26 +102,26 @@ public class Iperfer {
                 return port;
             } else {
                 System.out.printf("Error: port number must be in the range %d to %d\n", PORT_MIN, PORT_MAX);
-                return DUMMY_INT;
+                return DUMMY_PORT;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: port should be an int");
-            return DUMMY_INT;
+            System.out.println("Error: port should be an integer");
+            return DUMMY_PORT;
         }
     }
 
-    private static int parseTime(String timeStr) {
+    private static double parseTime(String timeStr) {
         try {
-            int port = Integer.parseInt(timeStr);
-            if (port > 0) {
-                return port;
+            double time = Double.parseDouble(timeStr);
+            if (time > 0) {
+                return time;
             } else {
-                System.out.println("Error: time should be positive int");
-                return DUMMY_INT;
+                System.out.println("Error: time should be a positive number");
+                return DUMMY_TIME;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: time should be an int");
-            return DUMMY_INT;
+            System.out.println("Error: time should be a positive number");
+            return DUMMY_TIME;
         }
     }
 }
