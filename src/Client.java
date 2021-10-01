@@ -36,7 +36,7 @@ public class Client {
 
             // Build data of all zeros
             byte[] data = new byte[DATA_SIZE];
-            int dataSent = 0; // in KB
+            int dataSentInKB = 0; // in KB
             double rate = 0; // in Mbps
 
             // Send out data in <this.time> seconds
@@ -48,9 +48,9 @@ public class Client {
                 // Send out 1000 bytes (1KB) per time
                 out.write(data);
                 endTimeInNanoSec = System.nanoTime();
-                hasRunInNanoSec += endTimeInNanoSec - startTimeInNanoSec;
+                hasRunInNanoSec += (endTimeInNanoSec - startTimeInNanoSec);
                 // recording
-                dataSent++;
+                dataSentInKB++;
             }
 
             // Close the connection
@@ -59,8 +59,8 @@ public class Client {
             socket.close();
 
             // Calculate and print the summary
-            rate = (dataSent / 1000) * 8 / this.time;
-            System.out.printf("sent=%d KB rate=%f Mbps\n", dataSent, rate);
+            rate = (dataSentInKB / 1000) * 8 / this.time;
+            System.out.printf("sent=%d KB rate=%f Mbps\n", dataSentInKB, rate);
         } catch(IOException u) {
             System.out.println(u);
             System.exit(1);
