@@ -43,7 +43,7 @@ public class Server {
             double rate = 0; // in Mbps
 
             // Receive data
-            double hasRunInNanoSec = 0;
+            long hasRunInNanoSec = 0;
             long startTimeInNanoSec, endTimeInNanoSec;
             while (true) {
                 startTimeInNanoSec = System.nanoTime();
@@ -67,7 +67,8 @@ public class Server {
 
             // Calculate and print the summary
             int dataReceivedInKB = dataReceivedInByte / 1000;
-            rate = (dataReceivedInKB / 1000) * 8 / hasRunInNanoSec;
+            double hasRunInSec = hasRunInNanoSec / Math.pow(10, 9);
+            rate = (dataReceivedInKB / 1000) * 8 / hasRunInSec;
             System.out.printf("received=%d KB rate=%f Mbps\n", dataReceivedInKB, rate);
         } catch(IOException i) {
             System.out.println(i);

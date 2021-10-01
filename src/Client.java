@@ -41,7 +41,7 @@ public class Client {
 
             // Send out data in <this.time> seconds
             double timeInNanoSec = this.time * Math.pow(10, 9);
-            double hasRunInNanoSec = 0;
+            long hasRunInNanoSec = 0;
             long startTimeInNanoSec, endTimeInNanoSec;
             while (hasRunInNanoSec < timeInNanoSec) {
                 startTimeInNanoSec = System.nanoTime();
@@ -59,7 +59,8 @@ public class Client {
             socket.close();
 
             // Calculate and print the summary
-            rate = (dataSentInKB / 1000) * 8 / this.time;
+            double hasRunInSec = hasRunInNanoSec / Math.pow(10, 9);
+            rate = (dataSentInKB / 1000) * 8 / hasRunInSec;
             System.out.printf("sent=%d KB rate=%f Mbps\n", dataSentInKB, rate);
         } catch(IOException u) {
             System.out.println(u);

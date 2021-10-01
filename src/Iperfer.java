@@ -23,7 +23,7 @@ public class Iperfer {
                     System.exit(-1);
                 }
                 int serverPort = parsePort(args[4]);
-                double time = parseTime(args[5]);
+                double time = parseTime(args[6]);
                 if (serverPort == DUMMY_PORT || time == DUMMY_TIME) {
                     System.exit(-1);
                 }
