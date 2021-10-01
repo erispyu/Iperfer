@@ -13,11 +13,11 @@ public class Iperfer {
 
         String runMode = args[0];
 
-        if (runMode == "-c") {
+        if (runMode.equals("-c")) {
             if (args.length != 7) {
                 printUsageAndExit();
             }
-            if (args[1] == "-h" && args[3] == "-p" && args[5] =="-t") {
+            if (args[1].equals("-h") && args[3].equals("-p") && args[5].equals("-t")) {
                 String serverHostname = args[2];
                 if (!checkHostname(serverHostname)) {
                     System.out.println("Error: invalid hostname. Should be in IPv4 format.");
@@ -34,11 +34,11 @@ public class Iperfer {
             }
         }
 
-        else if (runMode == "-s") {
+        else if (runMode.equals("-s")) {
             if (args.length != 3) {
                 printUsageAndExit();
             }
-            if (args[1] == "-p") {
+            if (args[1].equals("-p")) {
                 int listenPort = parsePort(args[2]);
                 if (listenPort == DUMMY_INT) {
                     System.exit(-1);
